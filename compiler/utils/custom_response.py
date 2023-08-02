@@ -1,4 +1,5 @@
 from typing import Any
+from fastapi.responses import JSONResponse
 
 
 def custom_response(
@@ -7,9 +8,9 @@ def custom_response(
         data: Any,
         message: str
 ):
-    return {
+    return JSONResponse({
         'success': success,
         'status_code': status_code,
         'data': data,
         'message': message
-    }
+    }, status_code=status_code)

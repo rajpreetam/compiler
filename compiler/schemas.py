@@ -21,4 +21,4 @@ class SubmissionResponseData(BaseModel):
 
 
 class SubmissionResponse(ResponseBody):
-    data: SubmissionResponseData
+    data: SubmissionResponseData | None = None

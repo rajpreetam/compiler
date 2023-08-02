@@ -9,7 +9,6 @@ def cpp_compiler(source_code: str, stdin: str):
         cpp_file.close()
         result = subprocess.run(
             ['g++', 'main.cpp', '-o', 'main'],
-            input=source_code,
             capture_output=True,
             text=True,
             timeout=4
