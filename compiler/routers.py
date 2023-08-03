@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 from .schemas import SubmissionRequest, SubmissionResponse
 from .services.submission_service import submission_service
+from core.utils.custom_exceptions import CustomInternalServerException
 
 router = APIRouter(
     prefix='/api/v1/compiler',
@@ -19,4 +20,4 @@ async def submission_route(data: SubmissionRequest):
         return submission_service(data)
     except Exception as e:
         print(f'Error: {e}')
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='Something went wrong')
+        raise CustomInternalServerException

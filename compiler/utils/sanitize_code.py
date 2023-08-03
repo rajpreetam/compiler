@@ -1,4 +1,4 @@
-from ..utils.custom_response import custom_response
+from core.utils.custom_response import custom_response
 from fastapi import status
 import re
 

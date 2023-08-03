@@ -2,7 +2,8 @@ from fastapi import status
 from ..schemas import SubmissionRequest
 from ..code_compilers.cpp_compiler import cpp_compiler
 from ..code_compilers.python_compiler import python_compiler
-from ..utils.custom_response import custom_response
+from core.utils.custom_response import custom_response
+from core.utils.custom_exceptions import CustomInternalServerException
 from ..utils.sanitize_code import (
     sanitize_python_code,
     sanitize_cpp_code
@@ -67,9 +68,4 @@ def submission_service(data: SubmissionRequest):
 
     except Exception as e:
         print('Error 62:', e)
-        return custom_response(
-            success=False,
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            data=None,
-            message='Something went wrong'
-        )
+        raise CustomInternalServerException

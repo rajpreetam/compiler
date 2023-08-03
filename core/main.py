@@ -1,15 +1,24 @@
-from fastapi import FastAPI, status
-from functools import lru_cache
+from fastapi import FastAPI, status, Request
 from fastapi.middleware.cors import CORSMiddleware
 from compiler.routers import router as compiler_router
-from .config import Settings
+from accounts.routers import router as auth_router
+from .utils.custom_exceptions import CustomInternalServerException
+from .utils.custom_response import custom_response
 
 app = FastAPI()
 
 
-@lru_cache()
-def get_settings():
-    return Settings()
+@app.exception_handler(CustomInternalServerException)
+async def custom_internal_server_exception_handler(
+    request: Request,
+    exc: CustomInternalServerException
+):
+    return custom_response(
+        success=False,
+        status_code=exc.status_code,
+        data=None,
+        message=exc.detail
+    )
 
 
 origins = [
@@ -26,15 +35,16 @@ app.add_middleware(
 )
 
 app.include_router(compiler_router)
+app.include_router(auth_router)
 
 
-@app.get('/')
+@app.get('/', tags=['Root'])
 async def index():
     return {
         'success': True,
         'status_code': status.HTTP_200_OK,
         'data': {
-            'version': '1.0.1'
+            'version': '1.0.2'
         },
         'message': 'Welcome to compiler api'
     }
