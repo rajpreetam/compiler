@@ -3,7 +3,10 @@ from ..schemas import SubmissionRequest
 from ..code_compilers.cpp_compiler import cpp_compiler
 from ..code_compilers.python_compiler import python_compiler
 from ..utils.custom_response import custom_response
-from ..utils.sanitize_code import sanitize_python_code
+from ..utils.sanitize_code import (
+    sanitize_python_code,
+    sanitize_cpp_code
+)
 
 
 def compiler_logic(stdout, stderr):
@@ -40,6 +43,10 @@ def submission_service(data: SubmissionRequest):
         stdin = data.stdin
 
         if language_id == 1:
+            is_vulnerable, result = sanitize_cpp_code(source_code)
+            if is_vulnerable:
+                return result
+
             stdout, stderr = cpp_compiler(source_code, stdin)
             return compiler_logic(stdout, stderr)
 
