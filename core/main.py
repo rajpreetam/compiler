@@ -1,8 +1,16 @@
 from fastapi import FastAPI, status
+from functools import lru_cache
 from fastapi.middleware.cors import CORSMiddleware
 from compiler.routers import router as compiler_router
+from .config import Settings
 
 app = FastAPI()
+
+
+@lru_cache()
+def get_settings():
+    return Settings()
+
 
 origins = [
     'http://localhost:3000',
